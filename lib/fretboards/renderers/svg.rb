@@ -6,6 +6,7 @@ module Fretboards::Renderers
     
     def render(fretboard)
       require "builder"
+      nut_attrs  = { :"stroke-width" => 3, :stroke => "#333" }
       line_attrs = { :"stroke-width" => 1, :stroke => "#333" }
       circle_attrs = { :"stroke-width" => 1, :stroke => "#000", :fill => "#333", :r => 6 }
       root_attrs = { :fill => "#f00" }
@@ -31,7 +32,16 @@ module Fretboards::Renderers
           x1 = 10
           x2 = 70
           y = 10 + fret * 20
-          svg.line(line_attrs.merge(:x1 => x1, :x2 => x2, :y1 => y, :y2 => y))
+          attrs = line_attrs.merge(:x1 => x1, :x2 => x2, :y1 => y, :y2 => y)
+          # nut
+          if fret == 0 && fretboard.fret_start == 0
+            attrs = attrs.merge(nut_attrs)
+            attrs[:y1] -= 1
+            attrs[:y2] -= 1
+            attrs[:x1] -= 1
+            attrs[:x2] += 1
+          end
+          svg.line(attrs)
         end
 
         # Open strings
