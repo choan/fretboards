@@ -15,23 +15,34 @@ module Fretboards::Renderers
       xml.svg(:viewBox => "0 0 80 120", :version => "1.1",
            :xmlns => "http://www.w3.org/2000/svg") do |svg|
       
+      
         # Vertical lines
         # TODO accept any number of strings
         (0..3).each do |string|
           x = 10 + string * 20
           y1 = 10
-          y2 = 110
+          y2 = 10 + fretboard.fret_end * 20
           svg.line(line_attrs.merge(:x1 => x, :x2 => x, :y1 => y1, :y2 => y2))
         end
         
         # Horizontal lines
         # TODO accept any range of frets
-        (0..5).each do |fret|
+        (0..fretboard.fret_end).each do |fret|
           x1 = 10
           x2 = 70
           y = 10 + fret * 20
           svg.line(line_attrs.merge(:x1 => x1, :x2 => x2, :y1 => y, :y2 => y))
         end
+
+        # Open strings
+        (1..fretboard.strings).each do |string|
+          if m = fretboard.marks.find { |m| m[:fret] == 0 && m[:string] == string }
+            attrs = { :r => 3, :"stroke-width" => 1, :stroke => "#000", :fill => "none", :cy => 4, :cx => 70 - (string - 1) * 20 }
+            svg.circle attrs;
+          end
+        end
+        
+
         
         # Dots
         start = fretboard.fret_start == 0 ? 1 : fretboard.fret_start
