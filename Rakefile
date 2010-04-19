@@ -16,7 +16,7 @@ OUTPUT_DIR_SVG = File.join OUTPUT_DIR, "svg"
 OUTPUT_DIR_TIFF = File.join OUTPUT_DIR, "tif"
 
 # TODO can we autodetect or force the .jar to be already in the classpath?
-BATIK_JAR = "~/classpath/batik-1.7/batik-rasterizer.jar"
+BATIK_JAR = ENV["BATIK_JAR"] || "~/classpath/batik-1.7/batik-rasterizer.jar"
 
 PNG_WIDTH  = 150
 PNG_HEIGHT = 200
@@ -35,7 +35,7 @@ directory OUTPUT_DIR_PNG
 
 task :default => :raster_all
 
-task :raster_all => [:raster_svg, :raster_png, :raster_tiff]
+task :raster_all => [:raster_svg, :raster_png]
 
 desc "svg output"
 task :raster_svg => [OUTPUT_DIR_SVG] do
