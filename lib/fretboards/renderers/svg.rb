@@ -16,6 +16,7 @@ module Fretboards::Renderers
            :xmlns => "http://www.w3.org/2000/svg") do |svg|
       
         # Vertical lines
+        # TODO accept any number of strings
         (0..3).each do |string|
           x = 10 + string * 20
           y1 = 10
@@ -24,6 +25,7 @@ module Fretboards::Renderers
         end
         
         # Horizontal lines
+        # TODO accept any range of frets
         (0..5).each do |fret|
           x1 = 10
           x2 = 70
