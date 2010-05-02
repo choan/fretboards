@@ -12,8 +12,9 @@ module Fretboards::Renderers
       root_attrs = { :fill => "#f00" }
       xml = ::Builder::XmlMarkup.new(:indent => 2)
       xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
+      canvas_height = 20 + fretboard.fret_end * 20
     
-      xml.svg(:viewBox => "0 0 80 120", :version => "1.1",
+      xml.svg(:viewBox => "0 0 80 #{canvas_height}", :version => "1.1",
            :xmlns => "http://www.w3.org/2000/svg") do |svg|
       
       
