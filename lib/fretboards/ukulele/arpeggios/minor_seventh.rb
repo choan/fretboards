@@ -45,7 +45,7 @@ module Fretboards::Ukulele::Arpeggios::MinorSeventh
 
   Fretboards.add(self.name, "fifth_position") do
     ::Fretboards::Fretboard.new(:strings => 4, :fret_start => 1, :fret_end => 5, :position => :relative) do
-      mark :string => 1, :fret => 1
+      mark :string => 4, :fret => 1
       mark :string => 4, :fret => 3, :symbol => :root
       mark :string => 3, :fret => 1
       mark :string => 2, :fret => 1
