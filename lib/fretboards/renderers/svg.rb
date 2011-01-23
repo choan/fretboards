@@ -48,7 +48,7 @@ module Fretboards::Renderers
         # Open strings
         (1..fretboard.strings).each do |string|
           if m = fretboard.marks.find { |m| m[:fret] == 0 && m[:string] == string }
-            attrs = { :r => 3, :"stroke-width" => 1, :stroke => "#000", :fill => "none", :cy => 4, :cx => 70 - (string - 1) * 20 }
+            attrs = { :r => 3, :"stroke-width" => 1, :stroke => "#000", :fill => "none", :cy => 3, :cx => 70 - (string - 1) * 20 }
             svg.circle attrs;
           end
         end
