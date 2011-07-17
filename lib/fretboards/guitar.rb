@@ -1,0 +1,2 @@
+module Fretboards::Guitar
+end

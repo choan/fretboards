@@ -5,8 +5,9 @@ require "rake/clean"
 require "fretboards"
 require "fretboards/ukulele"
 require "fretboards/ukulele/chords"
-require "fretboards/ukulele/arpeggios"
-require "fretboards/ukulele/scales"
+# require "fretboards/ukulele/arpeggios"
+# require "fretboards/ukulele/scales"
+require "fretboards/guitar/chords"
 
 
 
@@ -18,8 +19,10 @@ OUTPUT_DIR_TIFF = File.join OUTPUT_DIR, "tif"
 # TODO can we autodetect or force the .jar to be already in the classpath?
 BATIK_JAR = ENV["BATIK_JAR"] || "~/classpath/batik-1.7/batik-rasterizer.jar"
 
-PNG_WIDTH  = 150
-PNG_HEIGHT = 200
+PNG_WIDTH  = 200
+# PNG_WIDTH = 120 / 80.0 * 95
+# PNG_HEIGHT = 160
+PNG_HEIGHT = 160/100.0*200
 PNG_DPI    = 72
 
 TIFF_WIDTH  = 300
