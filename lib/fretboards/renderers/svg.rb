@@ -13,10 +13,14 @@ module Fretboards::Renderers
         :p5 => "5",
         :maj3 => "3",
         :root => "1",
-        :b3 => "b3",
-        :b5 => "b5",
-        :b7 => "b7",
-        :maj7 => 7,
+        :b3 => "♭3",
+        :b5 => "♭5",
+        :b7 => "♭7",
+        :maj7 => "7",
+        :p6 => "6",
+        :aug5 => "♯5",
+        :maj9 => "9",
+        :b9 => "♭9",
       }[sym] || sym.to_s
     end
     
@@ -55,6 +59,7 @@ module Fretboards::Renderers
         # Horizontal lines
         # TODO accept any range of frets
         (0..fretboard.fret_end).each do |fret|
+          # fret = fret - fretboard.fret_start
           x1 = padding
           x2 = canvas_width - padding
           y = padding + fret * fret_spacing

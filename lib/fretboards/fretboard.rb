@@ -29,9 +29,26 @@ module Fretboards
     end
     
     def self.parse_verbose(s)
-      "3/4 f3 i5, "
-      require "pp"
       fb = self.new
+      if s.start_with? "("
+        conf, s = *s.split(")")
+        s.strip!
+        conf = conf[1..-1]
+        conf_fragments = conf.split(/\s*,\s*/)
+        conf_fragments.each do |cf|
+          if cf.start_with? "frets:"
+            fst, fend = *cf.scan(/\d+/).map { |x| x.to_i }
+            fb.configure(:fret_start => fst, :fret_end => fend)
+          elsif cf.start_with? "label:"
+            fst, fend = *cf.scan(/\d+/).map { |x| x && x.to_i }
+            fb.label_fret(fst, fend || 0)
+          else
+            # unimplemented
+          end
+        end
+        require "pp"
+        pp conf_fragments
+      end
       s = s.sub(/,\s?$/, "")
       marks = s.split(/\s*,\s*/)
       marks.each do |m|
@@ -48,7 +65,6 @@ module Fretboards
         fb.mark params
       end
       fb
-      # pp parts
     end
   
     def initialize(conf = {}, &block)
