@@ -1,25 +1,24 @@
+# -*- encoding: utf-8 -*-
+$:.push File.expand_path("../lib", __FILE__)
+require "fretboards/version"
+
 Gem::Specification.new do |s|
-  s.name = 'fretboards'
-  s.version = '0.0.1'
-  s.date = '2012-03-15'
-  s.summary = 'Define and draw fretboards'
+  s.name        = "fretboards"
+  s.version     = Fretboards::VERSION
+  s.authors     = ["Choan Galvez"]
+  s.email       = ["choan.galvez@gmail.com"]
+  s.homepage    = ""
+  s.summary     = 'Define and draw fretboards'
   s.description = 'Allows defining instrument fretboard structures and representing them as highly customizable SVG graphics.'
-  s.authors = ['Choan Gálvez']
-  s.email = 'choan.galvez@gmail.com'
-  s.files = [
-    'lib/fretboards.rb',
-    'lib/fretboards/fretboard.rb',
-    'lib/fretboards/fretboard_collection.rb',
-    'lib/fretboards/pitch.rb',
-    'lib/fretboards/renderer/base.rb',
-    'lib/fretboards/renderer/svg.rb',
-    'lib/fretboards/ext/hash.rb',
-    'bin/fretboards_render',
-    ]
-  s.homepage = 'http://github.com/choan/fretboards/'
-  
-  s.add_runtime_dependency 'builder', '~> 3.0'
-  
-  s.test_files = Dir.glob('test/test_*.rb')
-  
+
+  s.rubyforge_project = "fretboards"
+
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.require_paths = ["lib"]
+
+  # specify any dependencies here; for example:
+  # s.add_development_dependency "rspec"
+  s.add_runtime_dependency "builder"
 end

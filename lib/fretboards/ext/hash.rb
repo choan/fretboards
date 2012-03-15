@@ -1,4 +1,4 @@
-module FretBoards
+module Fretboards
   module Ext
     module Hash
       
@@ -19,5 +19,5 @@ module FretBoards
 end
 
 class Hash
-  include FretBoards::Ext::Hash
+  include Fretboards::Ext::Hash
 end

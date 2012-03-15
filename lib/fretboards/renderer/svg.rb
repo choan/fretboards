@@ -1,7 +1,7 @@
 require "fretboards/renderer/base"
 require "fretboards/ext/hash"
 
-module FretBoards
+module Fretboards
   module Renderer
     class Svg < Base
       

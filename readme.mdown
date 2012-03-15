@@ -1,4 +1,4 @@
-# FretBoards
+# Fretboards
 
 Define and draw instrument fretboards.
 

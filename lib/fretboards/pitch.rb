@@ -1,4 +1,4 @@
-module FretBoards
+module Fretboards
   module Pitch
     
     TABLE = {

@@ -1,4 +1,4 @@
-class FretBoardCollection
+class FretboardCollection
   
   attr_reader :fbs
   
@@ -10,13 +10,13 @@ class FretBoardCollection
   end
   
   def add(dots, attrs = {})
-    if dots.is_a? FretBoard
+    if dots.is_a? Fretboard
       fb = dots
       if attrs[:title]
         fb.title = attrs[:title]
       end
     else
-      fb = FretBoard.new(@opts)
+      fb = Fretboard.new(@opts)
       if dots.is_a? String
         fb.terse(dots, attrs)
       else

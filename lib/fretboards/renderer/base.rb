@@ -1,4 +1,4 @@
-module FretBoards
+module Fretboards
   module Renderer
     class Base
       def render(fb)

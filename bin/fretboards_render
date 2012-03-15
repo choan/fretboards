@@ -3,8 +3,9 @@
 require "fretboards"
 require "fretboards/renderer/svg"
 
+# TODO make something useful
 terse = ARGV
-fb = FretBoards::FretBoard.new(:tuning => "g' c' e' a'")
+fb = Fretboards::Fretboard.new(:tuning => "g' c' e' a'")
 fb.semiterse(ARGV)
-renderer = FretBoards::Renderer::Svg.new()
+renderer = Fretboards::Renderer::Svg.new()
 puts renderer.render(fb)

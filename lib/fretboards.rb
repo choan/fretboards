@@ -1,6 +1,3 @@
-module FretBoards
-end
-
-$: << File.dirname(__FILE__)
-
+module Fretboards; end
+require 'fretboards/version'
 require "fretboards/fretboard"

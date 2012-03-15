@@ -1,7 +1,7 @@
 require "fretboards/pitch"
 
-module FretBoards
-  class FretBoard
+module Fretboards
+  class Fretboard
     
     attr_reader :marks, :labels, :barres, :conf, :opens, :mutes
     
@@ -158,7 +158,7 @@ module FretBoards
     end
     
     def clone
-      copy = FretBoard.new
+      copy = Fretboard.new
       copy.configure(@conf)
       @marks.each { |m| copy.mark(m) }
       @barres.each { |m| copy.barre(m) }
