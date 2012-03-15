@@ -1,0 +1,10 @@
+#!/usr/bin/env/ruby
+
+require "fretboards"
+require "fretboards/renderer/svg"
+
+terse = ARGV
+fb = FretBoards::FretBoard.new(:tuning => "g' c' e' a'")
+fb.semiterse(ARGV)
+renderer = FretBoards::Renderer::Svg.new()
+puts renderer.render(fb)
