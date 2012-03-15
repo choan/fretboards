@@ -5,9 +5,9 @@ require "rake/clean"
 require "fretboards"
 require "fretboards/ukulele"
 require "fretboards/ukulele/chords"
-# require "fretboards/ukulele/arpeggios"
-# require "fretboards/ukulele/scales"
-require "fretboards/guitar/chords"
+require "fretboards/ukulele/arpeggios"
+require "fretboards/ukulele/scales"
+# require "fretboards/guitar/chords"
 
 
 
@@ -19,10 +19,12 @@ OUTPUT_DIR_TIFF = File.join OUTPUT_DIR, "tif"
 # TODO can we autodetect or force the .jar to be already in the classpath?
 BATIK_JAR = ENV["BATIK_JAR"] || "~/classpath/batik-1.7/batik-rasterizer.jar"
 
-PNG_WIDTH  = 200
-# PNG_WIDTH = 120 / 80.0 * 95
-# PNG_HEIGHT = 160
-PNG_HEIGHT = 160/100.0*200
+PNG_WIDTH  = 100
+PNG_HEIGHT = 1.6*PNG_WIDTH
+
+PNG_BIG_WIDTH  = 400
+PNG_BIG_HEIGHT = 1.6*PNG_BIG_WIDTH
+
 PNG_DPI    = 72
 
 TIFF_WIDTH  = 300
@@ -53,9 +55,15 @@ task :raster_svg => [OUTPUT_DIR_SVG] do
   
 end
 
+task :raster_png => [:raster_png_big, :raster_png_small]
+
+task :raster_png_big => [OUTPUT_DIR_PNG] do
+  sh "java -Dapple.awt.graphics.UseQuartz=false -jar #{BATIK_JAR} -w #{PNG_BIG_WIDTH} -h #{PNG_BIG_HEIGHT}  -dpi #{PNG_DPI} -bg 255.255.255.255 -d #{OUTPUT_DIR_PNG}/big #{OUTPUT_DIR_SVG}/*.svg"  
+end
+
 desc "png output"
-task :raster_png => [ OUTPUT_DIR_PNG ] do
-  sh "java -Dapple.awt.graphics.UseQuartz=false -jar #{BATIK_JAR} -w #{PNG_WIDTH} -h #{PNG_HEIGHT}  -dpi #{PNG_DPI} -bg 255.255.255.255 -d #{OUTPUT_DIR_PNG} #{OUTPUT_DIR_SVG}/*.svg"
+task :raster_png_small => [ OUTPUT_DIR_PNG ] do
+  sh "java -Dapple.awt.graphics.UseQuartz=false -jar #{BATIK_JAR} -w #{PNG_WIDTH} -h #{PNG_HEIGHT}  -dpi #{PNG_DPI} -bg 255.255.255.255 -d #{OUTPUT_DIR_PNG}/small #{OUTPUT_DIR_SVG}/*.svg"
 end
 
 desc "tiff output"

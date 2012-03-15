@@ -18,6 +18,7 @@ module Fretboards::Renderers
         :b7 => "♭7",
         :maj7 => "7",
         :p6 => "6",
+        :maj6 => "6",
         :aug5 => "♯5",
         :maj9 => "9",
         :b9 => "♭9",
@@ -44,7 +45,7 @@ module Fretboards::Renderers
       canvas_width = (fretboard.strings - 1) * string_spacing + padding * 2
 
       xml.svg(:viewBox => "0 0 #{canvas_width} #{canvas_height}", :version => "1.1",
-           :xmlns => "http://www.w3.org/2000/svg") do |svg|
+           :xmlns => "http://www.w3.org/2000/svg", :width => "100%", :height => "100%") do |svg|
       
       
         # Vertical lines
@@ -58,7 +59,8 @@ module Fretboards::Renderers
         
         # Horizontal lines
         # TODO accept any range of frets
-        (0..fretboard.fret_end).each do |fret|
+        start_on = fretboard.fret_start == 1 ? 0 : fretboard.fret_start
+        (start_on..fretboard.fret_end).each do |fret|
           # fret = fret - fretboard.fret_start
           x1 = padding
           x2 = canvas_width - padding

@@ -42,6 +42,9 @@ module Fretboards
           elsif cf.start_with? "label:"
             fst, fend = *cf.scan(/\d+/).map { |x| x && x.to_i }
             fb.label_fret(fst, fend || 0)
+          elsif cf.start_with? "barre:"
+            barre_fret, barre_start, barre_end = *cf.scan(/\d+/).map(&:to_i)
+            fb.barre(:fret => barre_fret, :start => barre_start, :end => barre_end)
           else
             # unimplemented
           end
@@ -71,6 +74,7 @@ module Fretboards
       # puts "corriendo el fretborad"
       @marks = []
       @fret_labels = []
+      @barres = []
       @conf = {}
       configure(conf)
       self.instance_eval &block if block_given?
@@ -101,6 +105,10 @@ module Fretboards
         mark({ :string => string_number }.update(m) )
       end
       self
+    end
+    
+    def barre(opts)
+      @barres << opts.clone
     end
   
     def to_s
@@ -143,6 +151,17 @@ module Fretboards
       lines << ""
       pic = lines.join("\n#{fret_division}\n")
       pic
+    end
+    
+    def transpose(delta, opts = {}, &block)
+      dup = self.clone
+      dup.configure(opts)
+      dup.instance_eval &block if block_given?
+      dup.marks.map! do |m|
+        m[:fret] += delta
+        m
+      end
+      dup
     end
   
     # private

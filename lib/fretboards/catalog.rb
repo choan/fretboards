@@ -28,6 +28,7 @@ module Fretboards
     end
     
     def add(*args, &block)
+      # puts args
       @data[args.join("::")] = { :result => nil, :block => block }
     end
 
