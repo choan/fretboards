@@ -1,3 +1,0 @@
-module Fretboards::Ukulele
-  
-end

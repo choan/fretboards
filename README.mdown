@@ -1,4 +1,0 @@
-# Fretboards
-
-A library of fretboard schemes for string instruments.
-
