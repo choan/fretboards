@@ -1,33 +1,57 @@
-class FretboardCollection
-  
-  attr_reader :fbs
-  
-  def initialize(settings = {})
-    @opts = {
-      
-    }.update(settings)
-    @fbs = []
-  end
-  
-  def add(dots, attrs = {})
-    if dots.is_a? Fretboard
-      fb = dots
-    else
-      fb = Fretboard.new(@opts)
-      fb.terse(dots, attrs)
+require 'fretboards/renderer/svg'
+
+module Fretboards
+
+  class FretboardCollection
+
+    def initialize(settings = {})
+      @opts = {
+
+      }.update(settings)
+      @col = []
+      @forms = {}
     end
-    @fbs << fb
-    fb
-  end
-  
-  
-  
-  def render_to_files(renderer, output_dir = '.')
-    # TODO stablish filenaming
-    @fbs.each do |fb|
-      File.open("#{output_dir}/#{fb.title.gsub(/[^A-z0-9]/, "_")}.svg", "w") { |f| f.puts(renderer.render(fb)) }
+
+    def add(dots, attrs = {})
+      fb = fretboard(dots, attrs)
+      @col << fb
+      fb
     end
+
+    def fretboard(dots, attrs = {})
+      if dots.is_a? Fretboard
+        fb = dots
+      else
+        fb = Fretboard.new(@opts)
+        fb.terse(dots, attrs)
+      end
+      fb
+    end
+
+    def form_add(name, a, attrs = {})
+      add(form_create(name, a, attrs))
+    end
+
+    def form_create(name, a, attrs = {})
+      @forms[name] = fretboard(a, attrs)
+    end
+
+    def form_use(name, delta = 0, attrs = {})
+      raise "Form #{name} not found" if @forms[name].nil?
+      add(@forms[name].transpose(delta), attrs)
+    end
+
+    def renderer
+      Renderer::Svg.new
+    end
+
+    def render_to_files(output_dir = '.')
+      # TODO stablish filenaming pattern
+      @col.each do |fb|
+        File.open("#{output_dir}/#{fb.title.gsub(/[^A-z0-9]/, "_")}.svg", "w") { |f| f.puts(renderer.render(fb)) }
+      end
+    end
+
   end
-  
-  
+
 end
