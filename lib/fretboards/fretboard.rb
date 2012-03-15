@@ -23,23 +23,8 @@ module Fretboards
       @conf.update(conf)
     end
     
-    def terse(s, opts = {})
-      self.title = opts[:title] if opts[:title]
-      parts = s.split("-")
-      sc = index_to_string_number(0)
-      parts.each do |p|
-        attrs = {}
-        attrs[:string] = sc
-        attrs[:fret] = p[0..0].to_i
-        attrs[:symbol] = :root if p.include?("!")
-        # attrs[:symbol] = :phantom if p.include?("?")
-        mark attrs
-        sc -= 1
-      end
-      self
-    end
-    
-    def semiterse(a, opts = {})
+    def terse(a, opts = {})
+      a = a.split(/\s+/) if a.is_a?(String)
       self.title = opts[:title] if opts[:title]
       barres = {}
       a.each_with_index do |m, i|
