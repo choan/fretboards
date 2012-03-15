@@ -21,6 +21,7 @@ module Fretboards
     def fretboard(dots, attrs = {})
       if dots.is_a? Fretboard
         fb = dots
+        fb.title = attrs[:title] if attrs[:title]
       else
         fb = Fretboard.new(@opts)
         fb.terse(dots, attrs)
@@ -47,6 +48,7 @@ module Fretboards
 
     def render_to_files(output_dir = '.')
       # TODO stablish filenaming pattern
+      # TODO raise if not available name
       @col.each do |fb|
         File.open("#{output_dir}/#{fb.title.gsub(/[^A-z0-9]/, "_")}.svg", "w") { |f| f.puts(renderer.render(fb)) }
       end
