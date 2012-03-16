@@ -173,7 +173,7 @@ module Fretboards
         avail = @opts[:height] - @opts[:padding_top] - @opts[:padding_bottom] - @opts[:string_ext_bottom]
         avail -= @opts[:string_ext_top] if (fret_range.first != 1)
         total_frets = fret_range.last - fret_range.first
-        total_frets +=1 if (fret_range.first == 1)
+        total_frets += 1 if (fret_range.first == 1)
         start = @opts[:padding_top]
         start += @opts[:string_ext_top] if (fret_range.first != 1)
         ff_size = get_first_fret_size(total_frets, @opts[:fret_reduction_factor], avail)
