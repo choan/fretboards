@@ -56,7 +56,7 @@ module Fretboards
         xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
         view_box = [ @opts[:width], @opts[:height] ]
         view_box = view_box.reverse if @opts[:landscape]
-        xml.svg(@opts[:svg_attrs].merge(:viewBox => "0 0 #{view_box.join(' ')}", :height => "100%", :width => "100%")) do |svg|
+        xml.svg(@opts[:svg_attrs].merge(:viewBox => "0 0 #{view_box.join(' ')}")) do |svg|
           svg.g(@opts[:group_attrs]) do
             svg.g(landscape_attributes) do
               draw_title(svg) unless @opts[:show_title] == false
