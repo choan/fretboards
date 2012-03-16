@@ -2,11 +2,11 @@ require "fretboards/pitch"
 
 module Fretboards
   class Fretboard
-    
+
     attr_reader :marks, :labels, :barres, :conf, :opens, :mutes
-    
+
     attr_accessor :title
-    
+
     def initialize(conf = {}, &block)
       @labels = []
       @marks = []
@@ -17,12 +17,12 @@ module Fretboards
       configure(conf)
       self.instance_eval block if block_given?
     end
-    
-    
+
+
     def configure(conf)
       @conf.update(conf)
     end
-    
+
     def terse(a, opts = {})
       a = a.split(/\s+/) if a.is_a?(String)
       self.title = opts[:title] if opts[:title]
@@ -47,11 +47,11 @@ module Fretboards
           attrs[:symbol] = :root if symbols.include?("!")
           attrs[:symbol] = :phantom if symbols.include?("?")
         end
-        
+
         mark(attrs) if attrs[:fret]
-        
+
         mute(attrs[:string]) if has_mute
-        
+
         bs = m[-1..-1] == "["
         barres[attrs[:fret]] = [attrs[:fret], attrs[:string]] if bs
         be = m[-1..-1] == "]"
@@ -65,8 +65,8 @@ module Fretboards
       self
     end
 
-    
-    
+
+
     def mark(s, f = nil, settings = {})
       if !s.is_a? Hash
         s = { :string => s, :fret => f }.update(settings)
@@ -75,19 +75,19 @@ module Fretboards
       end
       @marks.push(s)
     end
-    
+
     def label(number, offset = 0)
       @labels[offset] = number
     end
-    
+
     def mute(s)
       @mutes << s
     end
-    
+
     def open(s)
       mark({:fret => 0, :string => s})
     end
-    
+
     def barre(fret, from = :max, to = 1, finger = 1)
       if fret.is_a? Hash
         b = {}.update(fret)
@@ -97,11 +97,11 @@ module Fretboards
       end
       @barres.push(b)
     end
-    
+
     def string_count
       @conf[:string_count] || @conf[:tuning].split(/\s+/).length
     end
-    
+
     def pitch_to_fret(pitch, string)
       # pp pitch
       diff = Pitch.to_diff(pitch)
@@ -110,7 +110,7 @@ module Fretboards
       # TODO warn if < 0
       diff - t
     end
-    
+
     def mark_pitch(pitch, opts = { })
       diff = Pitch.to_diff(pitch)
       tunings = tuning_to_diffs
@@ -127,7 +127,7 @@ module Fretboards
         mark(opts[:string], diff - tunings[string_number_to_index(string)])
       end
     end
-    
+
     def index_to_string_number(i)
       string_count - i
     end
@@ -141,7 +141,7 @@ module Fretboards
     def tuning_to_diffs
       @conf[:tuning].split(/\s+/).map { |p| Pitch.to_diff(p) }
     end
-    
+
     def clone
       copy = Fretboard.new
       copy.configure(@conf)
@@ -151,7 +151,7 @@ module Fretboards
       # pp copy
       copy
     end
-    
+
     def transpose(steps)
       copy = self.clone
       copy.transpose_marks(steps)
@@ -160,26 +160,32 @@ module Fretboards
       # pp self, copy
       copy
     end
-    
+
+    alias :+ transpose
+
+    def -(delta)
+      transpose(-delta)
+    end
+
     def transpose_marks(steps)
       @marks.each do |m|
         m[:fret] += steps
       end
     end
-    
+
     def transpose_barres(steps)
       @barres.each do |b|
         b[:fret] += steps
       end
     end
-    
+
     # def transpose_open(steps)
     #   @opens.each do |o|
     #     mark(o, steps)
     #   end
     #   @opens = []
     # end
-    
+
     def fret_range(size = 4)
       if marks.empty?
         [1, size]
@@ -187,19 +193,18 @@ module Fretboards
         min = marks.inject { |sum, i| i[:fret] < sum[:fret] ? i : sum }[:fret]
         max = marks.inject { |sum, i| i[:fret] > sum[:fret] ? i : sum }[:fret]
         if size >= max
-          # puts "#{self.title} pasa por el primer hilo"
           [1, size]
         else
           # puts "#{self.title} pasa por el segundo hilo"
           min = 1 if min == 0
-          max = (min + size) if (size > (max - min) ) 
+          max = (min + size) if (size > (max - min) )
           [min, max]
         end
       end
     end
-    
-    
-    
-    
+
+
+
+
   end
 end
