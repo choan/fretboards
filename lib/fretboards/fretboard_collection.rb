@@ -18,7 +18,13 @@ module Fretboards
       fb
     end
 
-    def fretboard(dots, attrs = {})
+    def fretboard(dots, opts = {})
+      if opts.is_a? String
+        attrs = {}
+        attrs[:title] = opts
+      else
+        attrs = opts.dup
+      end
       if dots.is_a? Fretboard
         fb = dots
         fb.title = attrs[:title] if attrs[:title]
