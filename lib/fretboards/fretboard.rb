@@ -11,7 +11,9 @@ module Fretboards
       @labels = []
       @marks = []
       @barres = []
-      @conf = {}
+      @conf = {
+        :tuning => %w{ g' c' e' a' }
+      }
       @mutes = []
       @opens = []
       configure(conf)
@@ -34,13 +36,12 @@ module Fretboards
         has_mute = m.start_with?('x')
         if !attrs[:fret] && !has_mute
           if pitch = m.match(/^([a-g](es|is)?[',]*)/)[1]
-            # pp pitch
             attrs[:fret] = pitch_to_fret(pitch, attrs[:string])
           end
         end
         attrs[:finger] = m.match(%r{-(\d+)})[1].to_i rescue nil
         attrs[:function] = m.match(%r{\(([^\)]*)\)})[1] rescue nil
-        symbols = m.match(%r{^\d([!\?]*)})[1].split("") rescue []
+        symbols = m.match(%r{([!\?]*)})[1].split("") rescue []
         if symbols.include?("!") && symbols.include?("?")
           attrs[:symbol] = :phantom_root
         else
@@ -57,7 +58,7 @@ module Fretboards
         be = m[-1..-1] == "]"
         barres[attrs[:fret]] << attrs[:string] if be
       end
-      # pp barres
+
       barres.each do |k, b|
         fret, f, t = *b
         barre(fret, f, t || 1)
@@ -77,6 +78,7 @@ module Fretboards
     end
 
     def label(number, offset = 0)
+      # TODO we're still not painting this
       @labels[offset] = number
     end
 
@@ -99,11 +101,10 @@ module Fretboards
     end
 
     def string_count
-      @conf[:string_count] || @conf[:tuning].split(/\s+/).length
+      @conf[:string_count] || @conf[:tuning].length
     end
 
     def pitch_to_fret(pitch, string)
-      # pp pitch
       diff = Pitch.to_diff(pitch)
       tunings = tuning_to_diffs
       t = tunings[string_number_to_index(string)]
@@ -139,7 +140,7 @@ module Fretboards
     end
 
     def tuning_to_diffs
-      @conf[:tuning].split(/\s+/).map { |p| Pitch.to_diff(p) }
+      @conf[:tuning].map { |p| Pitch.to_diff(p) }
     end
 
     def clone
@@ -148,7 +149,6 @@ module Fretboards
       @marks.each { |m| copy.mark(m) }
       @barres.each { |m| copy.barre(m) }
       @mutes.each { |m| copy.mute(m) }
-      # pp copy
       copy
     end
 
