@@ -57,14 +57,15 @@ module Fretboards
     end
 
 
-    def renderer
-      Renderer::Svg.new
+    def renderer(settings = {})
+      Renderer::Svg.new(settings)
     end
 
-    def render_to_files(output_dir = '.')
+    def render_to_files(output_dir = '.', settings = {})
       # TODO may we use a filenaming lambda?
+      r = renderer(settings)
       @col.each do |fb|
-        File.open("#{output_dir}/#{fb.title.gsub(/[^A-z0-9]/, "_")}.svg", "w") { |f| f.puts(renderer.render(fb)) }
+        File.open("#{output_dir}/#{fb.title.gsub(/[^A-z0-9]/, "_")}.svg", "w") { |f| f.puts(r.render(fb)) }
       end
     end
 
