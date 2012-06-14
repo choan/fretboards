@@ -12,7 +12,8 @@ module Fretboards
       @marks = []
       @barres = []
       @conf = {
-        :tuning => %w{ g' c' e' a' }
+        # default tuning is ukulele tuning
+        :tuning => Fretboards::Tuning::UKULELE
       }
       @mutes = []
       @opens = []
@@ -90,18 +91,19 @@ module Fretboards
       mark({:fret => 0, :string => s})
     end
 
-    def barre(fret, from = :max, to = 1, finger = 1)
+    def barre(fret, from = :max, to = 1)
       if fret.is_a? Hash
         b = {}.update(fret)
       else
         from = index_to_string_number(0) if from == :max
-        b = {:fret => fret, :from => from, :to => to, :finger => finger}
+        b = {:fret => fret, :from => from, :to => to}
       end
       @barres.push(b)
     end
 
     def string_count
-      @conf[:string_count] || @conf[:tuning].length
+      # @conf[:string_count] ||
+      @conf[:tuning].length
     end
 
     def pitch_to_fret(pitch, string)
@@ -156,8 +158,6 @@ module Fretboards
       copy = self.clone
       copy.transpose_marks(steps)
       copy.transpose_barres(steps)
-      # copy.transpose_open(steps)
-      # pp self, copy
       copy
     end
 
@@ -178,13 +178,6 @@ module Fretboards
         b[:fret] += steps
       end
     end
-
-    # def transpose_open(steps)
-    #   @opens.each do |o|
-    #     mark(o, steps)
-    #   end
-    #   @opens = []
-    # end
 
     def fret_range(size = 4)
       if marks.empty?
