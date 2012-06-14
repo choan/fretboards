@@ -38,4 +38,44 @@ class FretboardTest < Test::Unit::TestCase
     assert_equal([{:string => 1, :fret => 0}], fb.marks)
   end
   
+  def test_terse_full
+    fb = Fretboard.new
+    fb.terse %w{ 1/4-3(5) }
+    assert_equal([{:string => 4, :finger => 3, :function => "5", :fret => 1}], fb.marks)
+  end
+  
+  def test_terse_minimal
+    fb = Fretboard.new
+    fb.terse %w{ 1 }
+    assert_equal([{ :string => 4, :fret => 1 } ], fb.marks)
+  end
+  
+  def test_terse_barre
+    fb = Fretboard.new
+    fb.terse %w{ 3 1[ 1] 0 }
+    assert_equal([{:fret => 1, :from => 3, :to => 2 }], fb.barres)
+  end
+  
+  def test_terse_unfinished_barre
+    fb = Fretboard.new
+    fb.terse %w{ 3 1[ 1 1 }
+    assert_equal([{:fret => 1, :from => 3, :to => 1 }], fb.barres)
+  end
+  
+  def test_terse_symbols
+    # puts "symbols"
+    fb = Fretboard.new
+    fb.terse %w{ 3! }
+    assert_equal(:root, fb.marks.first[:symbol])
+    
+    fb = Fretboard.new
+    fb.terse %w{ 3? }
+    assert_equal(:phantom, fb.marks.first[:symbol])
+    
+    fb = Fretboard.new
+    fb.terse %w{ 3!? }
+    assert_equal(:phantom_root, fb.marks.first[:symbol])
+    
+  end
+  
 end

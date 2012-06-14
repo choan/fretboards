@@ -42,14 +42,15 @@ module Fretboards
         end
         attrs[:finger] = m.match(%r{-(\d+)})[1].to_i rescue nil
         attrs[:function] = m.match(%r{\(([^\)]*)\)})[1] rescue nil
-        symbols = m.match(%r{([!\?]*)})[1].split("") rescue []
-        if symbols.include?("!") && symbols.include?("?")
+
+        if m.include?("!") && m.include?("?")
           attrs[:symbol] = :phantom_root
         else
-          attrs[:symbol] = :root if symbols.include?("!")
-          attrs[:symbol] = :phantom if symbols.include?("?")
+          attrs[:symbol] = :root if m.include?("!")
+          attrs[:symbol] = :phantom if m.include?("?")
         end
 
+        attrs.reject! { |k, v| v.nil? }
         mark(attrs) if attrs[:fret]
 
         mute(attrs[:string]) if has_mute
