@@ -142,7 +142,7 @@ module Fretboards
     end
 
     def tuning_to_diffs
-      @conf[:tuning].map { |p| Pitch.to_diff(p) }
+      @tuning_diffs ||= @conf[:tuning].map { |p| Pitch.to_diff(p) }
     end
 
     def clone
