@@ -108,7 +108,7 @@ module Fretboards
           x = get_string_x(@fb.index_to_string_number(sn))
           y1 = @opts[:padding_top]
           y2 = @opts[:height] - @opts[:padding_bottom]
-          attrs = string_attrs.merge(:x1 => x, :x2 => x, :y1 => y1, :y2 => y2)
+          attrs = string_attrs.merge(:x1 => x, :x2 => x, :y1 => y1, :y2 => y2, :class => 'string')
           if (!@opts[:string_widths].empty?) 
             attrs = attrs.merge({ :"stroke-width" => @opts[:string_widths][sn] })
           end
@@ -119,7 +119,7 @@ module Fretboards
       def draw_title(svg)
         # TODO calculate ideal gap
         gap = @opts[:title_attrs][:"font-size"] + 5
-        svg.text(@fb.title, { :x => @opts[:width] * 0.5 + ((@opts[:padding_left] - @opts[:padding_right])*0.5), :y => @opts[:padding_top] - gap }.merge(@opts[:title_attrs]))
+        svg.text(@fb.title, { :x => @opts[:width] * 0.5 + ((@opts[:padding_left] - @opts[:padding_right])*0.5), :y => @opts[:padding_top] - gap, :class => 'title' }.merge(@opts[:title_attrs]))
       end
       
       def get_string_x(sn)
@@ -148,16 +148,16 @@ module Fretboards
           y = get_dot_position(0, fret_range.first)[1] + @opts[:label_attrs][:"font-size"] * 0.4
           x = @opts[:padding_left] - @opts[:label_attrs][:"font-size"] * 1.25
           # TODO allow rotating
-          svg.text(fret_range.first, { :y => y, :x => x }.merge(@opts[:label_attrs]))
+          svg.text(fret_range.first, { :y => y, :x => x, :class => 'label' }.merge(@opts[:label_attrs]))
         end
       end
       
       def draw_fret(svg, n)
         y = get_fret_y(n)
         if @opts[:rectangular_frets]
-          svg.rect({ :y => y - 1.25, :x => @opts[:padding_left] - @opts[:fret_ext_left], :width => @opts[:width] - @opts[:padding_left] - @opts[:padding_right] + @opts[:fret_ext_left] + @opts[:fret_ext_right] }.merge(@opts[:rectangular_fret_attrs]))
+          svg.rect({ :y => y - 1.25, :x => @opts[:padding_left] - @opts[:fret_ext_left], :width => @opts[:width] - @opts[:padding_left] - @opts[:padding_right] + @opts[:fret_ext_left] + @opts[:fret_ext_right], :class => 'fret' }.merge(@opts[:rectangular_fret_attrs]))
         else
-          svg.line(fret_attrs.merge(:x1 => @opts[:padding_left], :x2 => @opts[:width] - @opts[:padding_right], :y1 => y, :y2 => y))
+          svg.line(fret_attrs.merge(:x1 => @opts[:padding_left], :x2 => @opts[:width] - @opts[:padding_right], :y1 => y, :y2 => y, :class => 'fret'))
         end
       end
       
@@ -165,7 +165,7 @@ module Fretboards
         y = @opts[:padding_top] - @opts[:nut_attrs][:"stroke-width"] * 0.5
         extra_first = 0 # @opts[:string_widths][0] * 0.5
         extra_last = 0 # @opts[:string_widths].last * 0.5
-        svg.line(nut_attrs.merge(:x1 => @opts[:padding_left] - extra_first, :x2 => @opts[:width] - @opts[:padding_right] + extra_last, :y1 => y, :y2 => y))
+        svg.line(nut_attrs.merge(:x1 => @opts[:padding_left] - extra_first, :x2 => @opts[:width] - @opts[:padding_right] + extra_last, :y1 => y, :y2 => y, :class => 'nut'))
       end
       
       def get_fret_y(fret_number)
@@ -217,7 +217,9 @@ module Fretboards
       
       
       def draw_dot(svg, x, y, m)
-        attrs = @opts[:dot_attrs].merge(:cx => x, :cy => y)
+        cnames = %w[dot]
+        cnames << "dot-#{m[:symbol]}" if m[:symbol]
+        attrs = @opts[:dot_attrs].merge(:cx => x, :cy => y, :class => cnames.join(' '))
         attrs = attrs.merge(@opts[(m[:symbol].to_s + "_symbol_attrs").to_sym]) if (m[:symbol] && @opts[(m[:symbol].to_s + "_symbol_attrs").to_sym])
         svg.circle(attrs)
       end
@@ -243,6 +245,7 @@ module Fretboards
             attrs = @opts[sym_attrs]
             attrs = attrs.merge(@opts[custom_attrs]) if (m[:symbol] && @opts[custom_attrs])
             attrs = attrs.merge(:x => x, :y => y)
+            attrs = attrs.merge(:class => 'text-in-dot')
             svg.text(m[sym].to_s, attrs)
           end
         end
@@ -256,7 +259,7 @@ module Fretboards
           if m[sym]
             x = get_string_x(m[:string])
             y = @opts[:height] - @opts[:padding_bottom] + @opts[:in_bottom_attrs][:"font-size"] * 1.5
-            attrs = @opts[sym_attrs].merge(:x => x, :y => y)
+            attrs = @opts[sym_attrs].merge(:x => x, :y => y, :class => 'text-at-bottom')
             svg.text(m[sym].to_s, attrs)
           end
         end
@@ -266,7 +269,7 @@ module Fretboards
         margin_bottom = @opts[:open_margin_bottom]
         y = @opts[:padding_top] - @opts[:open_attrs][:r] - @opts[:nut_attrs][:"stroke-width"] - margin_bottom
         x = get_string_x(m[:string])
-        attrs = {:cx => x, :cy => y}.merge(@opts[:open_attrs])
+        attrs = {:cx => x, :cy => y, :class => 'open'}.merge(@opts[:open_attrs])
         symbol_attrs = "open_#{m[:symbol]}_symbol_attrs".to_sym
         attrs = attrs.merge(@opts[symbol_attrs]) if (m[:symbol] && @opts[symbol_attrs])
         svg.circle(attrs)
@@ -291,7 +294,7 @@ module Fretboards
           w = get_string_x(b[:to]) - dot_pos[0] + barre_attrs[:height]
           x = dot_pos[0] - barre_attrs[:height] * 0.5
           y = dot_pos[1] - barre_attrs[:height] * 0.5
-          svg.rect({:y => y, :x => x, :width => w}.merge(barre_attrs))
+          svg.rect({:y => y, :x => x, :width => w, :class => :barre}.merge(barre_attrs))
         end
       end
             
