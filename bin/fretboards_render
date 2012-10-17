@@ -1,11 +1,13 @@
-#!/usr/bin/env/ruby
+#!/usr/bin/env ruby
 
 require "fretboards"
 require "fretboards/renderer/svg"
 
 # TODO make something useful
 terse = ARGV
+puts terse.inspect
+
 fb = Fretboards::Fretboard.new(:tuning => "g' c' e' a'")
-fb.semiterse(ARGV)
+fb.terse(ARGV)
 renderer = Fretboards::Renderer::Svg.new()
 puts renderer.render(fb)
