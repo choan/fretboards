@@ -7,7 +7,7 @@ require "fretboards/renderer/svg"
 terse = ARGV
 puts terse.inspect
 
-fb = Fretboards::Fretboard.new(:tuning => "g' c' e' a'")
+fb = Fretboards::Fretboard.new(:tuning => %w{g' c' e' a'})
 fb.terse(ARGV)
 renderer = Fretboards::Renderer::Svg.new()
 puts renderer.render(fb)
