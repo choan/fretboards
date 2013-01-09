@@ -35,6 +35,17 @@ module Fretboards
       diff = base + octave_shift
       diff
     end
-    
+
+    def self.from_diff(diff)
+      diff += 12
+      octave_direction = diff > 0 ? 1 : -1
+      abs_diff = diff.abs
+      octave_shift = diff / 12
+      shift = diff % 12
+      s_pitch = TABLE.find { |k, v| v == shift }.first
+      suffix = (octave_direction > 0 ? "'" : ',') * octave_shift
+      s_pitch + suffix
+    end
+        
   end
 end
