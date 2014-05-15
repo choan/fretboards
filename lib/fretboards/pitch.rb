@@ -16,13 +16,14 @@ module Fretboards
       "gis" => 8,
       "aes" => 8,
       "a" => 9,
+      "beses" => 9,
       "ais" => 10,
       "bes" => 10,
       "b" => 11
     }
     
     def self.to_diff(name)
-      pitch, alt, octave = name.scan(/([a-g](es|is)?)([',]*)/)[0]
+      pitch, alt, octave = name.scan(/([a-g](es|is){0,2})([',]*)/)[0]
       base = TABLE[pitch]
       octave_shift = if octave.nil?
         -12
