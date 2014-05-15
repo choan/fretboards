@@ -118,7 +118,7 @@ module Fretboards
       
       def draw_title(svg)
         # TODO calculate ideal gap
-        gap = @opts[:title_attrs][:"font-size"] + 5
+        gap = @opts[:title_attrs][:"font-size"] 
         svg.text(@fb.title, { :x => @opts[:width] * 0.5 + ((@opts[:padding_left] - @opts[:padding_right])*0.5), :y => @opts[:padding_top] - gap, :class => 'title' }.merge(@opts[:title_attrs]))
       end
       
