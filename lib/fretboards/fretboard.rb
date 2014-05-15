@@ -36,8 +36,9 @@ module Fretboards
         attrs[:fret] = m.match(%r{^(\d+)})[1].to_i rescue nil
         has_mute = m.start_with?('x')
         if !attrs[:fret] && !has_mute
-          if pitch = m.match(/^([a-g](es|is)?[',]*)/)[1]
+          if pitch = m.match(/^([a-g](es|is){0,2}[',]*)/)[1]
             attrs[:fret] = pitch_to_fret(pitch, attrs[:string])
+            attrs[:pitch] = pitch
           end
         end
         attrs[:finger] = m.match(%r{-(\d+)})[1].to_i rescue nil
