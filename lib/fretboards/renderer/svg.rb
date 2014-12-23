@@ -39,7 +39,7 @@ module Fretboards
           :string_ext_top => 5,
           :fret_ext_left => 2,
           :fret_ext_right => 2,
-          :string_widths => [ 2, 2, 2, 2 ], # TODO calculate on demand if not passed
+          :string_widths => [ 2, 2, 2, 2, 2, 2 ], # TODO calculate on demand if not passed
           :fret_reduction_factor => 0.95,
           :rectangular_frets => true,
           :fret_count => 4,
