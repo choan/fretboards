@@ -3,7 +3,7 @@ require "fretboards/pitch"
 module Fretboards
   class Fretboard
 
-    attr_reader :marks, :labels, :barres, :conf, :opens, :mutes
+    attr_reader :marks, :labels, :barres, :conf, :opens, :mutes, :label_offset, :offset
 
     attr_accessor :title
 
@@ -18,6 +18,7 @@ module Fretboards
       @mutes = []
       @opens = []
       @offset = 0
+      @label_offset = 0
       configure(conf)
       self.instance_eval block if block_given?
     end
@@ -70,9 +71,16 @@ module Fretboards
       self
     end
 
-    def offset(n)
+    def set_offset(n)
       @offset = n
+      self
     end
+    
+    def set_label_offset(n)
+      @label_offset = n
+      self
+    end
+    
 
     def mark(s, f = nil, settings = {})
       if !s.is_a? Hash
@@ -196,7 +204,7 @@ module Fretboards
           # puts "#{self.title} pasa por el segundo hilo"
           min = 1 if min == 0
           max = (min + size) if (size > (max - min) )
-          [min + @offset, max + @offset]
+          [min + offset, max + offset]
         end
       end
     end
