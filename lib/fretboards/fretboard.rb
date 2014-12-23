@@ -195,7 +195,7 @@ module Fretboards
           # puts "#{self.title} pasa por el segundo hilo"
           min = 1 if min == 0
           max = (min + size) if (size > (max - min) )
-          [min + offset, max + offset]
+          [min + @offset, max + @offset]
         end
       end
     end
