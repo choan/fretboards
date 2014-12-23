@@ -99,7 +99,7 @@ module Fretboards
       end
       
       def string_spacing
-        (@opts[:width] - @opts[:padding_left] - @opts[:padding_right]) / (@fb.string_count - 1)
+        (@opts[:width] - @opts[:padding_left] - @opts[:padding_right]) / ((@fb.string_count - 1).to_f)
       end
       
       def draw_strings(svg)
