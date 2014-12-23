@@ -69,7 +69,9 @@ module Fretboards
       self
     end
 
-
+    def offset(n)
+      @offset = n
+    end
 
     def mark(s, f = nil, settings = {})
       if !s.is_a? Hash
@@ -193,7 +195,7 @@ module Fretboards
           # puts "#{self.title} pasa por el segundo hilo"
           min = 1 if min == 0
           max = (min + size) if (size > (max - min) )
-          [min, max]
+          [min + offset, max + offset]
         end
       end
     end
