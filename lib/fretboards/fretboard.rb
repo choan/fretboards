@@ -17,6 +17,7 @@ module Fretboards
       }
       @mutes = []
       @opens = []
+      @offset = 0
       configure(conf)
       self.instance_eval block if block_given?
     end
