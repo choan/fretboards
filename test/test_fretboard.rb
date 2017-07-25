@@ -78,4 +78,16 @@ class FretboardTest < Test::Unit::TestCase
     
   end
   
+  def test_fret_range
+    fb = Fretboard.new
+    fb.terse %w{ 0 0 0 3 }
+    assert_equal([1, 4], fb.fret_range)
+    fb = Fretboard.new
+    fb.terse %w{ 0 0 0 5 }
+    assert_equal([1, 5], fb.fret_range)
+    fb = Fretboard.new
+    fb.terse %w{ 7 6 5 9 }
+    assert_equal([5, 9], fb.fret_range)
+  end
+  
 end
