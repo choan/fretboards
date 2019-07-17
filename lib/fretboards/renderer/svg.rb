@@ -17,7 +17,7 @@ module Fretboards
           :open_root_symbol_attrs => { :"stroke-width" => 2, :r => 3 },
           :open_phantom_root_symbol_attrs => { :"stroke-width" => 1, :r => 3, :"stroke-dasharray" => "1 1" },
           :svg_attrs => { :xmlns => "http://www.w3.org/2000/svg", :version => "1.1" },
-          :in_dot_attrs => { :"text-anchor" => "middle", :fill => "#fff", :"font-weight" => "normal", :"font-size" => 10, :"font-family" => "sans-serif", :"font-weight" => "bold"},
+          :in_dot_attrs => { :"text-anchor" => "middle", :fill => "#fff",  :"font-size" => 10, :"font-family" => "sans-serif", :"font-weight" => "bold"},
           :in_dot_root_symbol_attrs => { :fill => "#000", :"font-weight" => "bold" },
           :in_bottom_attrs => { :"text-anchor" => "middle", :fill => "#000", :"font-weight" => "normal", :"font-size" => 8, :"font-family" => "sans-serif" },
           :label_attrs => { :"text-anchor" => "end", :fill => "#000", :"font-size" => 10, :"font-family" => 'sans-serif' },
