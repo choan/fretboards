@@ -1,13 +1,14 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "fretboards/version"
+require 'fretboards/version'
 
 Gem::Specification.new do |s|
-  s.name        = "fretboards"
+  s.name        = 'fretboards'
   s.version     = Fretboards::VERSION
-  s.authors     = ["Choan Galvez"]
-  s.email       = ["choan.galvez@gmail.com"]
-  s.homepage    = ""
+  s.authors     = ['Choan Galvez']
+  s.email       = ['choan.galvez@gmail.com']
+  s.licenses    = ['MIT']
+  s.homepage    = ''
   s.summary     = 'Define and draw fretboards'
   s.description = 'Allows defining instrument fretboard structures and representing them as highly customizable SVG graphics.'
 
