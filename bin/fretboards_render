@@ -2,12 +2,87 @@
 
 require "fretboards"
 require "fretboards/renderer/svg"
+require "docopt"
 
-# TODO make something useful
-terse = ARGV
-# puts terse.inspect
+doc = <<DOCOPT
+Output a SVG fretboard.
 
-fb = Fretboards::Fretboard.new(:tuning => %w{g' c' e' a'})
-fb.terse(ARGV)
-renderer = Fretboards::Renderer::Svg.new()
+Usage:
+  #{__FILE__} [options] [<dots>...]
+  #{__FILE__} (--tuning=<tuning> | --guitar | --ukulele) [options] [<dots>...]
+  #{__FILE__} -h | --help
+  #{__FILE__} --version
+
+Options:
+  --tuning=<tuning>   Tuning of the instrument [default: g' c' e' a'].
+  --width=<width>     Width of the fretboard [default: 108].
+  --height=<height>   Height of the fretboard [default: 180].
+  --fret-count=<fret-count>   Number of frets [default: 4].
+  --title=<title>     Title of the fretboard [default: ].
+  -h --help           Show this screen.
+  --version           Show version.
+
+Arguments:
+  <dots>  Dots to be drawn on the fretboard. Defaults to 4 strings and ukulele tuning. Actual tuning pitches are only considered when passing the dot marks as pitches.
+
+Dots are specified as a sequence of numbers, one per string, starting from 0. Use x for a muted string.
+
+  #{__FILE__} 0 2 1 2
+
+You can also specify dots as pitches, a to g.
+
+- Use `is` suffix for sharp, `es` for flat.
+- Use `'` or `,` for octaves up or down. `c'` is middle C.
+
+  #{__FILE__} aes\\' d\\' f\\' b\\'
+
+Draw guitar fretboard passing `--guitar` or `--guitar-7`:
+
+  #{__FILE__} --guitar x 3 2 0 1 0
+
+Use `[` and `]` to indicate barres:
+
+  #{__FILE__} --guitar 1\\[ 3 3 2 1 1\\]
+
+Mark a dot as root with `!`:
+
+  #{__FILE__} --guitar 3! 2 0 0 3 3
+
+Annotate fingerings with `-`:
+
+  #{__FILE__} --guitar 3-2 2-1 0 0 3-3 3-4
+
+To place multiple dots on the same string, use `/`:
+
+  #{__FILE__} --guitar 5/6 8/6 5/5 7/5 5/4 7/4 5/3 7/3 5/2 8/2 5/1 8/1
+
+Report bugs at https://github.com/choan/fretboards/issues
+DOCOPT
+
+begin
+  arguments = Docopt::docopt(doc, version: ::Fretboards::VERSION)
+rescue Docopt::Exit => e
+  puts e.message
+  exit
+end
+
+if arguments['--guitar']
+  arguments['--tuning'] = "e, a, d g b e'"
+elsif arguments['--guitar-7']
+  arguments['--tuning'] = "b,, e, a, d g b e'"
+elsif arguments['--ukulele']
+  arguments['--tuning'] = "g' c' e' a'"
+end
+
+terse = arguments['<dots>']
+tuning = arguments['--tuning'].split(' ')
+title = arguments['--title']
+width = arguments['--width'].to_i
+height = arguments['--height'].to_i
+fret_count = arguments['--fret-count'].to_i
+
+fb = Fretboards::Fretboard.new(:tuning => tuning)
+fb.title = title unless title.empty?
+fb.terse(terse)
+renderer = Fretboards::Renderer::Svg.new(width: width, height: height, fret_count: fret_count)
 puts renderer.render(fb)
