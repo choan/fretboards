@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
   s.add_runtime_dependency "builder"
+  s.add_runtime_dependency "docopt", "~> 0.6.0"
 end
