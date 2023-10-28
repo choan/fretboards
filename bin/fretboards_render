@@ -18,6 +18,7 @@ Options:
   --width=<width>     Width of the fretboard [default: 108].
   --height=<height>   Height of the fretboard [default: 180].
   --fret-count=<fret-count>   Number of frets [default: 4].
+  --offset=<offset>   Offset of the fretboard [default: 0].
   --title=<title>     Title of the fretboard [default: ].
   -h --help           Show this screen.
   --version           Show version.
@@ -84,5 +85,12 @@ fret_count = arguments['--fret-count'].to_i
 fb = Fretboards::Fretboard.new(:tuning => tuning)
 fb.title = title unless title.empty?
 fb.terse(terse)
+
+if arguments['--offset']
+  fb.set_offset(arguments['--offset'].to_i)
+end
+
+
 renderer = Fretboards::Renderer::Svg.new(width: width, height: height, fret_count: fret_count)
+
 puts renderer.render(fb)

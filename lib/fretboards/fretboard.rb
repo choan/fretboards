@@ -75,12 +75,12 @@ module Fretboards
       @offset = n
       self
     end
-    
+
     def set_label_offset(n)
       @label_offset = n
       self
     end
-    
+
 
     def mark(s, f = nil, settings = {})
       if !s.is_a? Hash
@@ -196,15 +196,17 @@ module Fretboards
       if marks.empty?
         [1, size]
       else
-        min = marks.inject { |sum, i| i[:fret] < sum[:fret] ? i : sum }[:fret]
+        min = marks.inject { |sum, i| (i[:fret] < sum[:fret]) ? i : sum }[:fret]
         max = marks.inject { |sum, i| i[:fret] > sum[:fret] ? i : sum }[:fret]
         if size >= max
           [1, size]
         else
-          # puts "#{self.title} pasa por el segundo hilo"
-          min = 1 if min == 0
-          max = (min + size) if (size > (max - min) )
-          [min + offset, max + offset]
+          if offset > 0
+            [ offset, offset + size - 1 ]
+          else
+            min = 1 if min == 0
+            [min, max]
+          end
         end
       end
     end
