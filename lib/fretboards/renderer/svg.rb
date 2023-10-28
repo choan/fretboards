@@ -4,7 +4,7 @@ require "fretboards/ext/hash"
 module Fretboards
   module Renderer
     class Svg < Base
-      
+
       def initialize(opts = {})
         # TODO configuration should merge recursively
         @opts = {
@@ -48,7 +48,7 @@ module Fretboards
           :open_margin_bottom => 4,
         }.deep_merge(opts)
       end
-      
+
       def render(fb)
         @fb = fb
         require "builder"
@@ -75,7 +75,7 @@ module Fretboards
         # @svg
         # xml
       end
-      
+
       def landscape_attributes
         if @opts[:landscape]
           {
@@ -85,23 +85,23 @@ module Fretboards
           {}
         end
       end
-      
+
       def string_attrs
         @opts[:string_attrs]
       end
-      
+
       def fret_attrs
         @opts[:fret_attrs]
       end
-      
+
       def nut_attrs
         @opts[:nut_attrs]
       end
-      
+
       def string_spacing
         (@opts[:width] - @opts[:padding_left] - @opts[:padding_right]) / ((@fb.string_count - 1).to_f)
       end
-      
+
       def draw_strings(svg)
         (0..@fb.string_count-1).each do |sn|
           # x = @opts[:padding_left] + sn * string_spacing(fb)
@@ -109,24 +109,24 @@ module Fretboards
           y1 = @opts[:padding_top]
           y2 = @opts[:height] - @opts[:padding_bottom]
           attrs = string_attrs.merge(:x1 => x, :x2 => x, :y1 => y1, :y2 => y2, :class => 'string')
-          if (!@opts[:string_widths].empty?) 
+          if (!@opts[:string_widths].empty?)
             attrs = attrs.merge({ :"stroke-width" => @opts[:string_widths][sn] })
           end
           svg.line(attrs)
         end
       end
-      
+
       def draw_title(svg)
         # TODO calculate ideal gap
-        gap = @opts[:title_attrs][:"font-size"] 
+        gap = @opts[:title_attrs][:"font-size"]
         svg.text(@fb.title, { :x => @opts[:width] * 0.5 + ((@opts[:padding_left] - @opts[:padding_right])*0.5), :y => @opts[:padding_top] - gap, :class => 'title' }.merge(@opts[:title_attrs]))
       end
-      
+
       def get_string_x(sn)
         sn = @fb.string_number_to_index(sn)
         @opts[:padding_left] + sn * string_spacing
       end
-      
+
       def draw_frets(svg)
         fret_range = @fb.fret_range(@opts[:fret_count])
         total_frets = fret_range.last - fret_range.first + 1
@@ -141,7 +141,7 @@ module Fretboards
           draw_fret(svg, n+1)
         end
       end
-      
+
       def draw_labels(svg)
         fret_range = @fb.fret_range(@opts[:fret_count])
         if fret_range.first > 1
@@ -151,7 +151,7 @@ module Fretboards
           svg.text(fret_range.first + @fb.label_offset, { :y => y, :x => x, :class => 'label' }.merge(@opts[:label_attrs]))
         end
       end
-      
+
       def draw_fret(svg, n)
         y = get_fret_y(n)
         if @opts[:rectangular_frets]
@@ -160,14 +160,14 @@ module Fretboards
           svg.line(fret_attrs.merge(:x1 => @opts[:padding_left], :x2 => @opts[:width] - @opts[:padding_right], :y1 => y, :y2 => y, :class => 'fret'))
         end
       end
-      
+
       def draw_nut(svg)
         y = @opts[:padding_top] - @opts[:nut_attrs][:"stroke-width"] * 0.5
         extra_first = 0 # @opts[:string_widths][0] * 0.5
         extra_last = 0 # @opts[:string_widths].last * 0.5
         svg.line(nut_attrs.merge(:x1 => @opts[:padding_left] - extra_first, :x2 => @opts[:width] - @opts[:padding_right] + extra_last, :y1 => y, :y2 => y, :class => 'nut'))
       end
-      
+
       def get_fret_y(fret_number)
         fret_range = @fb.fret_range(@opts[:fret_count])
         avail = @opts[:height] - @opts[:padding_top] - @opts[:padding_bottom] - @opts[:string_ext_bottom]
@@ -184,7 +184,7 @@ module Fretboards
         end
         y
       end
-      
+
       def get_first_fret_size(gaps, factor, avail)
         sum = 0
         (0..gaps-1).each do |t|
@@ -192,8 +192,8 @@ module Fretboards
         end
         avail.to_f/sum.to_f
       end
-      
-      
+
+
       def draw_marks(svg)
         @fb.marks.each do |m|
           if m[:fret] == 0
@@ -209,13 +209,13 @@ module Fretboards
           end
         end
       end
-      
+
       def draw_blue_note_symbol(svg, x, y, m)
         svg.rect(:x => x - 4, :y => y - 4, :width => 8, :height => 8, :fill => "#000", :stroke => "", :transform => "rotate(-45 #{x} #{y})")
         # svg.circle(:cx => x, :cy => y, :r => 3, :fill => "blue")
       end
-      
-      
+
+
       def draw_dot(svg, x, y, m)
         cnames = %w[dot]
         cnames << "dot-#{m[:symbol]}" if m[:symbol]
@@ -223,7 +223,7 @@ module Fretboards
         attrs = attrs.merge(@opts[(m[:symbol].to_s + "_symbol_attrs").to_sym]) if (m[:symbol] && @opts[(m[:symbol].to_s + "_symbol_attrs").to_sym])
         svg.circle(attrs)
       end
-      
+
       def get_dot_position(string, fret)
         fret_range = @fb.fret_range(@opts[:fret_count])
         diff = fret_range.first == 1 ? 0 : fret_range.first - 1
@@ -232,7 +232,7 @@ module Fretboards
         y = 0.5 * (get_fret_y(fret - 1) + get_fret_y(fret))
         [x, y]
       end
-      
+
       def draw_in_dots(svg, name)
         # TODO allow rotating dot text on rotated fretboards
         sym = name.to_sym
@@ -250,7 +250,7 @@ module Fretboards
           end
         end
       end
-      
+
       def draw_in_bottom(svg, name)
         # TODO allow rotating bottom text on rotated fretboards
         sym = name.to_sym
@@ -264,7 +264,7 @@ module Fretboards
           end
         end
       end
-      
+
       def draw_open(svg, m)
         margin_bottom = @opts[:open_margin_bottom]
         y = @opts[:padding_top] - @opts[:open_attrs][:r] - @opts[:nut_attrs][:"stroke-width"] - margin_bottom
@@ -274,7 +274,7 @@ module Fretboards
         attrs = attrs.merge(@opts[symbol_attrs]) if (m[:symbol] && @opts[symbol_attrs])
         svg.circle(attrs)
       end
-      
+
       def draw_mutes(svg)
         margin_bottom = @opts[:open_margin_bottom]
         cy = @opts[:padding_top] - @opts[:open_attrs][:r] - @opts[:nut_attrs][:"stroke-width"] - margin_bottom
@@ -286,7 +286,7 @@ module Fretboards
           # svg.text("x", { :x => cx, :y => cy })
         end
       end
-      
+
       def draw_barres(svg)
         barre_attrs = @opts[:barre_attrs]
         @fb.barres.each do |b|
@@ -297,8 +297,8 @@ module Fretboards
           svg.rect({:y => y, :x => x, :width => w, :class => :barre}.merge(barre_attrs))
         end
       end
-            
-      
+
+
     end
   end
 end

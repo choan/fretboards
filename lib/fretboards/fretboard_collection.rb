@@ -10,7 +10,7 @@ module Fretboards
       @tuning = %w{ g' c' e' a' }
       @table = "default"
     end
-    
+
     def set_tuning(a)
       @tuning = a
     end
@@ -20,14 +20,14 @@ module Fretboards
       @col << fb
       fb
     end
-    
+
     def define(title, a, attrs = {})
       form_add(title, a, { :title => title }.merge(attrs))
     end
 
     def use(title)
       raise "#{title} form not available" unless @forms[title]
-      @forms[title] 
+      @forms[title]
     end
 
 
@@ -44,6 +44,9 @@ module Fretboards
       else
         fb = Fretboard.new(:tuning => @tuning)
         fb.terse(dots, attrs)
+      end
+      if attrs[:offset]
+        fb.set_offset(attrs[:offset])
       end
       fb
     end
