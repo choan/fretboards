@@ -146,7 +146,11 @@ module Fretboards
         fret_range = @fb.fret_range(@opts[:fret_count])
         if fret_range.first > 1
           y = get_dot_position(0, fret_range.first + @fb.label_offset)[1] + @opts[:label_attrs][:"font-size"] * 0.4
-          x = @opts[:padding_left] - @opts[:label_attrs][:"font-size"] * 1.25
+          x = if !@opts[:label_attrs][:'x-offset'].nil?
+                @opts[:padding_left] - @opts[:label_attrs][:'x-offset']
+              else
+                @opts[:padding_left] - @opts[:label_attrs][:"font-size"] * 1.25
+              end
           # TODO allow rotating
           svg.text(fret_range.first + @fb.label_offset, { :y => y, :x => x, :class => 'label' }.merge(@opts[:label_attrs]))
         end
